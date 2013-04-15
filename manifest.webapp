@@ -1,0 +1,20 @@
+{
+  "name": "Test Hello",
+  "description": "Tests for my first app",
+  "type": "certified",
+  "launch_path": "/index.html",
+  "developer": {
+    "name": "Daniela",
+    "url": "http://www.mozilla.org"
+  },
+  "icons": {
+    "128": "/style/icons/icon-128.png"
+  },
+  "locales": {
+    "en-US": {
+      "name": "Hello",
+      "description": "Gaia Hello World"
+    }
+  },
+  "default_locale": "en-US"
+}
