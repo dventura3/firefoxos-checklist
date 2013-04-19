@@ -8,11 +8,11 @@
     "url": "https://github.com/dventura3"
   },
   "icons": {
-    "128": "/style/icons/icon-128.png"
+    "128": "/style/icons/check02-128.png"
   },
   "locales": {
     "en-US": {
-      "name": "Hello",
+      "name": "CheckList",
       "description": "Gaia Hello World"
     }
   },
