@@ -7,8 +7,10 @@
         <title>CheckList</title>
 
         <link rel="stylesheet" type="text/css"  href="style/style.css" />
+        <link rel="stylesheet" type="text/css" href="style/tooltipster.css" />
 
         <script type="text/javascript"  src="js/jquery-1.8.2.min.js"></script>
+        <script type="text/javascript" src="js/jquery.tooltipster.min.js"></script>
   		<script type="text/javascript"  src="js/home.js"></script>
 
     </head>
@@ -17,8 +19,12 @@
         <!-- Home -->
         <div data-role="page" id="page_home">
             <div id="header">
-                <div id="title"><br>CheckList</div>
+                <input type='image' style="margin-top:30px;margin-left:30px;float:left;" src='style/icons/next_top.png' alt='remove' onclick="alert('ola');" />
+                <div id="titletwo" style="font-size: 25px; width: 100%; text-align: center; margin-left:-90px;"><br>CheckList</div>
+                <input type='image' id="show_tooltip" style="margin-top:-32px;margin-right:30px;float:right;" src='style/icons/add.png' alt='add' title="<br><div style='font-size: 16px;'>Add New Category:</div><br><input style='height: 24px;' class='box6' type='text' size='40'><br><br><div style='text-align:center;'><a href='#' class='button_green'>&nbspAdd&nbsp</a>&nbsp<a href='#' class='button_red'>Cancel</a></div>" class="tooltip" />
             </div>
+
+            <span id="demo-events" title="<br><br><a href='http://www.cssscoop.com/'>cssscoop.com</a><br><br><button>Add</button>" class="tooltip">Click</span>
             
             <!--
             <div class="wraper">
@@ -38,7 +44,9 @@
         <!-- Category Details-->
         <div data-role="page" id="page_category_details">
             <div id="header">
-                <div id="title"><br>CheckList</div>
+                <input type='image'  style="margin-top:20px;margin-left:30px;float:left;" src='style/icons/next_top.png' alt='remove' onclick="selectPage('#wrapper_homepage','#wrapper_settingpage');" />
+                <div id="titletwo" style="font-size: 25px; width: 100%; text-align: center; margin-left:-90px;"><br>CheckList</div>
+                <input type='image'  style="margin-top:-43px;margin-right:30px;float:right;" src='style/icons/add.png' alt='add' onclick="alert('ola');" />
             </div>
             <div class="container_category">
             </div>

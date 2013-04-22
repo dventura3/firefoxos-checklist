@@ -33,10 +33,26 @@
     }     
     
 
+    function show_tootipster(){
+
+    }
+
+
     $(document).ready(function(){
 
         //show home page
         selectPage("#page_home","#page_category_details");
+
+        $('#show_tooltip').tooltipster({
+            interactive: true,
+            trigger: 'click',
+            position: 'bottom-right',
+        });
+
+        $(window).keypress(function() {
+            $('#demo-events').tooltipster('hide');
+        });
+
 
         // In the following line, you should include the prefixes of implementations you want to test.
         window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
