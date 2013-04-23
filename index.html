@@ -19,12 +19,11 @@
         <!-- Home -->
         <div data-role="page" id="page_home">
             <div id="header">
-                <input type='image' style="margin-top:30px;margin-left:30px;float:left;" src='style/icons/next_top.png' alt='remove' onclick="alert('ola');" />
+                <input type='image' id="show_list_category_to_remove" style="margin-top:31px;margin-left:30px;float:left;" src='style/icons/delete.png' alt='remove' />
                 <div id="titletwo" style="font-size: 25px; width: 100%; text-align: center; margin-left:-90px;"><br>CheckList</div>
-                <input type='image' id="show_tooltip" style="margin-top:-32px;margin-right:30px;float:right;" src='style/icons/add.png' alt='add' title="<br><div style='font-size: 16px;'>Add New Category:</div><br><input style='height: 24px;' class='box6' type='text' size='40'><br><br><div style='text-align:center;'><a href='#' class='button_green'>&nbspAdd&nbsp</a>&nbsp<a href='#' class='button_red'>Cancel</a></div>" class="tooltip" />
+                <input type='image' id="show_tooltip" style="margin-top:-32px;margin-right:30px;float:right;" src='style/icons/add.png' alt='add' title="<br><div style='font-size: 16px;'>Add New Category:</div><br><input id='txt_add_category' style='height: 24px;' class='box6' type='text' size='40'><br><br><div style='text-align:center;'><a id='button_add_category' href='#' class='button_green'>&nbspAdd&nbsp</a>&nbsp<a href='#' class='button_red'>Cancel</a></div>" class="tooltip" />
             </div>
 
-            <span id="demo-events" title="<br><br><a href='http://www.cssscoop.com/'>cssscoop.com</a><br><br><button>Add</button>" class="tooltip">Click</span>
             
             <!--
             <div class="wraper">
@@ -44,9 +43,9 @@
         <!-- Category Details-->
         <div data-role="page" id="page_category_details">
             <div id="header">
-                <input type='image'  style="margin-top:20px;margin-left:30px;float:left;" src='style/icons/next_top.png' alt='remove' onclick="selectPage('#wrapper_homepage','#wrapper_settingpage');" />
+                <input type='image' id="next_page" style="margin-top:30px;margin-left:30px;float:left;" src='style/icons/next_top.png' alt='remove' />
                 <div id="titletwo" style="font-size: 25px; width: 100%; text-align: center; margin-left:-90px;"><br>CheckList</div>
-                <input type='image'  style="margin-top:-43px;margin-right:30px;float:right;" src='style/icons/add.png' alt='add' onclick="alert('ola');" />
+                <input type='image' id="show_tooltip_item" style="margin-top:-32px;margin-right:30px;float:right;" src='style/icons/add.png' alt='add' title="<br><div style='font-size: 16px;'>Add New Element in todo list:</div><br><input style='height: 24px;' class='box6' type='text' size='40'><br><br><div style='text-align:center;'><a href='#' class='button_green'>&nbspAdd&nbsp</a>&nbsp<a href='#' class='button_red'>Cancel</a></div>" class="tooltip" />
             </div>
             <div class="container_category">
             </div>

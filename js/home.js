@@ -1,10 +1,10 @@
 (function () {
 
-    //json list of objects
-    var todo_list = [];
+    //json objects of elements contained on DB
+    var todo = {};
 
-    //to open DB
-    var request;
+    //istance of DB
+    var db;
     
     var obj1 = { 
                     id: 1, 
@@ -33,26 +33,53 @@
     }     
     
 
-    function show_tootipster(){
-
-    }
 
 
     $(document).ready(function(){
 
-        //show home page
+        //default page - show home page
         selectPage("#page_home","#page_category_details");
 
+        //set dialog options to add new category - use plugin "tooltipster"
         $('#show_tooltip').tooltipster({
             interactive: true,
             trigger: 'click',
             position: 'bottom-right',
         });
 
+        /*
         $(window).keypress(function() {
             $('#demo-events').tooltipster('hide');
         });
+        */
 
+        //set dialog options to add new item for one category - use plugin "tooltipster"
+        $('#show_tooltip_item').tooltipster({
+            interactive: true,
+            trigger: 'click',
+            position: 'bottom-right',
+        });
+
+        // set event "click" for next button 
+        $("#next_page").live('click',function(event,data){
+            selectPage("#page_home","#page_category_details");
+        });
+
+        // set event "click" for add category button
+        $("#button_add_category").live('click',function(event,data){
+            add_category_on_DB();
+        });
+
+        // set event "click" to show list of category to remove
+        $("#show_list_category_to_remove").live('click',function(event,data){
+            refresh_category_list_GUI("remove");
+            $(".container").append("<br><br>");
+            $(".container").append("<a id='goto_show_category' style='margin: 0 auto;' href='#' class='button_red'>Cancel</a>");
+        });
+
+        $("#goto_show_category").live('click',function(event,data){
+            refresh_category_list_GUI("show");
+        });
 
         // In the following line, you should include the prefixes of implementations you want to test.
         window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
@@ -68,55 +95,88 @@
 
         // Let us open our database.
         // If the database does not exist, then it is created; if the database already exists, then it is simply opened.
-        request = window.indexedDB.open("ck01", 1)
+        request = window.indexedDB.open("ck02", 1);
 
         //IF request give me an error --> DB not open
         request.onerror = function(event) {
             
         };
 
+        // to update version of database
         request.onupgradeneeded = function(event) {
             var db = event.target.result;
          
             // Create an objectStore to hold information about our customers. We're
             // going to use "id" as our key path because it's guaranteed to be
             // unique. An objectStore represent a table.
-            var objectStore = db.createObjectStore("list", { keyPath: "id" });
+            var objectStore = db.createObjectStore("list", { keyPath: "id", autoIncrement: true });
          
             // Create an index to search customers by category. We may have duplicates
             // so we can't use a unique index.
             objectStore.createIndex("category", "category", { unique: false });
+
+            objectStore.createIndex("id", "id", { unique: false });
          
             // Store values in the newly created objectStore.
             //objectStore.add(obj1);
             //objectStore.add(obj2);
         };
 
-        var db;
         //IF request is sucesses --> DB open
         request.onsuccess = function(event) {
             db = request.result;
-
-            // To start writing something to the database, you need to initiate a transaction with an objectStore name 
-            // and the type of action you want to do – in this case read and write.
-            var transaction = db.transaction(["list"], "readwrite");
-
-            var objectStore = transaction.objectStore("list");
-
-            // read elements in DB with cursor
-            objectStore.openCursor().onsuccess = function(event) {
-                var cursor = event.target.result;
-                if (cursor) {
-                    //alert("Category for ID " + cursor.key + " is " + cursor.value.category + " and list of Items: " + JSON.stringify(cursor.value.items));
-                    $(".container").append(html_category(cursor.key,cursor.value.category));
-                    todo_list.push(cursor.value);
-                    cursor.continue();
-                }
-            };
+            refresh_category_list_GUI("show");
         };
     });
 
-    var html_category = function(id, name){
+    var refresh_category_list_GUI = function(operation_type){
+        //remove all contents in category list
+        $('.container').empty();
+
+        //remove all elements in todo list:
+        todo_list = null;
+
+        // To start writing something to the database, you need to initiate a transaction with an objectStore name 
+        // and the type of action you want to do – in this case read and write.
+        var transaction = db.transaction(["list"], "readwrite");
+
+        var objectStore = transaction.objectStore("list");
+
+        // read elements in DB with cursor
+        objectStore.openCursor().onsuccess = function(event) {
+            var cursor = event.target.result;
+            if (cursor) {
+                //alert("Category for ID " + cursor.key + " is " + cursor.value.category + " and list of Items: " + JSON.stringify(cursor.value.items));
+                if(operation_type == "show")
+                    $(".container").append(html_show_category(cursor.key,cursor.value.category));
+                else if(operation_type == "remove"){
+                    $(".container").append(html_remove_category(cursor.key,cursor.value.category));
+                }
+                todo[cursor.key] = cursor.value;
+                cursor.continue();
+            }
+        };
+    }
+
+    var add_category_on_DB = function(){
+        var transaction = db.transaction(["list"], "readwrite");
+        var objectStore = transaction.objectStore("list");
+        var request = objectStore.put({
+            category:$("#txt_add_category").val(),
+            items:[]
+        });
+
+        request.onsuccess = function(e){
+            $('#show_tooltip').tooltipster('hide');
+            refresh_category_list_GUI("show");
+        };
+
+        request.onerror = function(e) {
+            console.log(e.value);
+        };
+    }
+
+    var html_show_category = function(id, name){
         html = "";
         html += "<div id='category_"+id+"'>";
         html += "<div id='one_raw'><h1>"+name+"</h1><img src='style/icons/background/next.png' style='float:right;' /></div>";
@@ -124,10 +184,34 @@
         html += "</div>";
 
         $("#category_"+id).live('click',function(event,data){
-            //alert(this.id);
             //show home page
             selectPage("#page_category_details","#page_home");
             html_all_items_for_category(this.id);
+        });
+
+        return html;
+    }
+
+    var html_remove_category = function(id, name){
+        html = "";
+        html += "<div id='category_remove_"+id+"'>";
+        html += "<div id='one_raw'><h1>"+name+"</h1><img src='style/icons/remove_category.png' style='float:right;' /></div>";
+        html += "<div id='separator'><img src=''></img></div>";
+        html += "</div>";
+
+        $("#category_remove_"+id).live('click',function(event,data){
+            id_cat_to_remove = this.id.split("category_remove_")[1];
+            var store = db.transaction(["list"], "readwrite").objectStore("list");
+            var result = store.delete(parseInt(id_cat_to_remove));
+            result.onsuccess = function(evt) {
+                // It's gone!
+                refresh_category_list_GUI("show");
+            };
+
+            result.onerror = function (evt) {
+                console.error("[ERROR] delete category:", evt.target.errorCode);
+            };
+            
         });
 
         return html;
@@ -139,11 +223,11 @@
 
         id_category = category.split("category_")[1];
 
-        for(i=0; i<todo_list.length; i++){
-            if(todo_list[i].id == id_category){
-                for(j=0; j<todo_list[i].items.length; j++){
-                    $(".container_category").append(html_single_item(todo_list[i].items[j].title,todo_list[i].items[j].state,j));
-                }
+        var todo_selected = todo && todo[id_category];
+
+        if(todo_selected){
+            for(j in todo_selected.items){
+                $(".container_category").append(html_single_item(todo_selected.items[j].title,todo_selected.items[j].state,j));
             }
         }
     }
@@ -170,5 +254,6 @@
 
         return html;
     }
+
 
 })();
