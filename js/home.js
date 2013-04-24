@@ -73,8 +73,6 @@
         // set event "click" to show list of category to remove
         $("#show_list_category_to_remove").live('click',function(event,data){
             refresh_category_list_GUI("remove");
-            $(".container").append("<br><br>");
-            $(".container").append("<a id='goto_show_category' style='margin: 0 auto;' href='#' class='button_red'>Cancel</a>");
         });
 
         $("#goto_show_category").live('click',function(event,data){
@@ -154,6 +152,11 @@
                 }
                 todo[cursor.key] = cursor.value;
                 cursor.continue();
+            }else{
+                if(operation_type == "remove"){
+                    $(".container").append("<br><br>");
+                    $(".container").append("<a id='goto_show_category' style='left:35%; position: relative;' href='#' class='button_green'>Done</a>");
+                }
             }
         };
     }
@@ -205,7 +208,7 @@
             var result = store.delete(parseInt(id_cat_to_remove));
             result.onsuccess = function(evt) {
                 // It's gone!
-                refresh_category_list_GUI("show");
+                refresh_category_list_GUI("remove");
             };
 
             result.onerror = function (evt) {
